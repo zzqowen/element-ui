@@ -78,7 +78,7 @@ export default {
     },
     zIndex: {
       type: Number,
-      default: 2000
+      default: 3000
     },
     onSwitch: {
       type: Function,
@@ -293,6 +293,7 @@ export default {
     }
   },
   mounted() {
+    document.body.appendChild(this.$el);
     this.deviceSupportInstall();
     // add tabindex then wrapper can be focusable via Javascript
     // focus wrapper so arrow key can't cause inner scroll behavior underneath
