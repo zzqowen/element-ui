@@ -3,7 +3,7 @@
     <div tabindex="-1" ref="el-image-viewer__wrapper" class="el-image-viewer__wrapper" :style="{ 'z-index': zIndex }">
       <div class="el-image-viewer__mask" @click="hide"></div>
       <!-- CLOSE -->
-      <span class="el-image-viewer__btn el-image-viewer__close" @click="hide">
+      <span class="el-image-viewer__btn el-image-viewer__close" style="color: white;" @click="hide">
         <i class="el-icon-circle-close"></i>
       </span>
       <!-- ARROW -->
