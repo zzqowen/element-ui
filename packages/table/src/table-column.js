@@ -41,6 +41,8 @@ export default {
     reserveSelection: Boolean,
     filterMethod: Function,
     filteredValue: Array,
+    filterInputable: Boolean,
+    filterInputPlaceholder: String,
     filters: Array,
     filterPlacement: String,
     filterMultiple: {
@@ -281,7 +283,7 @@ export default {
     const basicProps = ['columnKey', 'label', 'className', 'labelClassName', 'type', 'renderHeader', 'formatter', 'fixed', 'resizable'];
     const sortProps = ['sortMethod', 'sortBy', 'sortOrders'];
     const selectProps = ['selectable', 'reserveSelection'];
-    const filterProps = ['filterMethod', 'filters', 'filterMultiple', 'filterOpened', 'filteredValue', 'filterPlacement'];
+    const filterProps = ['filterMethod', 'filters', 'filterInputable', 'filterInputPlaceholder', 'filterMultiple', 'filterOpened', 'filteredValue', 'filterPlacement'];
 
     let column = this.getPropsData(basicProps, sortProps, selectProps, filterProps);
     column = mergeOptions(defaults, column);
