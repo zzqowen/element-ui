@@ -2,8 +2,10 @@
 
 import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event';
 import scrollbarWidth from 'element-ui/src/utils/scrollbar-width';
-import { toObject } from 'element-ui/src/utils/util';
+import { on, off } from 'element-ui/src/utils/dom';
+import { rafThrottle, isFirefox, toObject } from 'element-ui/src/utils/util';
 import Bar from './bar';
+const mousewheelEventName = isFirefox() ? 'DOMMouseScroll' : 'mousewheel';
 
 /* istanbul ignore next */
 export default {
@@ -12,6 +14,7 @@ export default {
   components: { Bar },
 
   props: {
+    horizontal: Boolean,
     native: Boolean,
     wrapStyle: {},
     wrapClass: {},
@@ -97,6 +100,20 @@ export default {
   },
 
   methods: {
+
+    horizontalScroll() {
+      const wrap = this.wrap;
+      this._mouseWheelHandler = rafThrottle(e => {
+        const delta = e.wheelDelta ? e.wheelDelta : -e.detail;
+        if (delta > 0) {
+          wrap.scrollLeft += delta;
+        } else {
+          wrap.scrollLeft += delta;
+        }
+      });
+      on(wrap, mousewheelEventName, this._mouseWheelHandler);
+    },
+
     handleScroll() {
       const wrap = this.wrap;
 
@@ -120,11 +137,13 @@ export default {
   mounted() {
     if (this.native) return;
     this.$nextTick(this.update);
+    this.horizontal && this.horizontalScroll();
     !this.noresize && addResizeListener(this.$refs.resize, this.update);
   },
 
   beforeDestroy() {
     if (this.native) return;
     !this.noresize && removeResizeListener(this.$refs.resize, this.update);
+    this.horizontal && off(this.$refs.wrap, mousewheelEventName, this._mouseWheelHandler);
   }
 };

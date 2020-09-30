@@ -8,6 +8,16 @@
 :::demo 使用`type`、`plain`、`round`和`circle`属性来定义 Button 的样式。
 
 ```html
+<el-scrollbar style="width: 600px;padding：10px" :native="false" horizontal>
+  <div style="white-space:nowrap;display: inline-block;box-sizing: border-box;">
+    <span
+      style="border: 1px solid black; padding: 0px;box-sizing: border-box;"
+      v-for="(item, index) in 30"
+      :key="index"
+    >{{index}} 这里是一些文本。</span>
+  </div>
+</el-scrollbar>
+
 <el-row>
   <el-button>默认按钮</el-button>
   <el-button type="primary">主要按钮</el-button>
