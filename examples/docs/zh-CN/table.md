@@ -10,6 +10,8 @@
 ```html
   <template>
     <el-table
+      :use-virtual="true"
+      :height="300"
       :data="tableData"
       style="width: 100%">
       <el-table-column
@@ -33,23 +35,11 @@
     export default {
       data() {
         return {
-          tableData: [{
+          tableData: new Array(10000).fill({
             date: '2016-05-02',
             name: '王小虎',
             address: '上海市普陀区金沙江路 1518 弄'
-          }, {
-            date: '2016-05-04',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1517 弄'
-          }, {
-            date: '2016-05-01',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1519 弄'
-          }, {
-            date: '2016-05-03',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1516 弄'
-          }]
+          }) 
         }
       }
     }
@@ -861,6 +851,7 @@
   </el-table>
   <div style="margin-top: 20px">
     <el-button @click="toggleSelection([tableData[1], tableData[2]])">切换第二、第三行的选中状态</el-button>
+    <el-button @click="toggleAllSelection">全选</el-button>
     <el-button @click="toggleSelection()">取消选择</el-button>
   </div>
 </template>
@@ -870,30 +861,37 @@
     data() {
       return {
         tableData: [{
+          id: '1',
           date: '2016-05-03',
           name: '王小虎',
           address: '上海市普陀区金沙江路 1518 弄'
         }, {
+          id: '2',
           date: '2016-05-02',
           name: '王小虎',
           address: '上海市普陀区金沙江路 1518 弄'
         }, {
+          id: '3',
           date: '2016-05-04',
           name: '王小虎',
           address: '上海市普陀区金沙江路 1518 弄'
         }, {
+          id: '4',
           date: '2016-05-01',
           name: '王小虎',
           address: '上海市普陀区金沙江路 1518 弄'
         }, {
+          id: '5',
           date: '2016-05-08',
           name: '王小虎',
           address: '上海市普陀区金沙江路 1518 弄'
         }, {
+          id: '6',
           date: '2016-05-06',
           name: '王小虎',
           address: '上海市普陀区金沙江路 1518 弄'
         }, {
+          id: '7',
           date: '2016-05-07',
           name: '王小虎',
           address: '上海市普陀区金沙江路 1518 弄'
@@ -911,6 +909,9 @@
         } else {
           this.$refs.multipleTable.clearSelection();
         }
+      },
+      toggleAllSelection() {
+        this.$refs.multipleTable.toggleAllSelection();
       },
       handleSelectionChange(val) {
         this.multipleSelection = val;

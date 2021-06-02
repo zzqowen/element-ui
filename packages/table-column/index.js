@@ -1,4 +1,5 @@
-import ElTableColumn from '../table/src/table-column';
+import { PlTableColumn as ElTableColumn} from 'pl-table';
+ElTableColumn.name = 'ElTableColumn';
 
 /* istanbul ignore next */
 ElTableColumn.install = function(Vue) {
