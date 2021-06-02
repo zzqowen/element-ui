@@ -1,6 +1,6 @@
 {
   "name": "element-ui-zq",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A Component Library for Vue.js.",
   "main": "lib/element-ui.common.js",
   "files": [
@@ -64,9 +64,10 @@
     "babel-helper-vue-jsx-merge-props": "^2.0.0",
     "deepmerge": "^1.2.0",
     "normalize-wheel": "^1.0.1",
-    "pl-table": "^2.7.5",
     "resize-observer-polyfill": "^1.5.0",
-    "throttle-debounce": "^1.0.1"
+    "throttle-debounce": "^1.0.1",
+    "vuedraggable": "2.23.2",
+    "xe-utils": "2.3.0"
   },
   "peerDependencies": {
     "vue": "^2.5.17"

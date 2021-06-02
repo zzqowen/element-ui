@@ -64,6 +64,7 @@ export default {
       style: this.viewStyle,
       ref: 'resize'
     }, this.$slots.default);
+
     const wrap = (
       <div
         ref="wrap"
@@ -73,6 +74,7 @@ export default {
         { [view] }
       </div>
     );
+
     let nodes;
 
     if (!this.native) {

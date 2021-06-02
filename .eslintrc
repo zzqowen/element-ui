@@ -6,7 +6,18 @@
   "plugins": ["html", "json"],
   "extends": "elemefe",
   "rules": {
-    "no-restricted-globals": ["error", "event", "fdescribe"]
+    "no-restricted-globals": ["error", "event", "fdescribe"],
+    "space-before-function-paren": 0,
+    "semi": "off",
+    "indent": "off",
+    "no-multi-spaces": "off",
+    "key-spacing": "off",
+    "space-before-blocks": "off",
+    "space-infix-ops": "off",
+    "spaced-comment": "off",
+    "comma-dangle": "off",
+    "comma-spacing": "off",
+    "keyword-spacing": "off"
   },
   "parserOptions": {
     "ecmaVersion": 6,

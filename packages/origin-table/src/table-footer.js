@@ -1,6 +1,14 @@
 import LayoutObserver from './layout-observer';
 import { mapStates } from './store/helper';
 
+/**
+ * 字符串是否含有html标签的检测
+ * @param htmlStr
+ */
+function checkHtml (htmlStr) {
+    let reg = /<[^>]+>/g;
+    return reg.test(htmlStr);
+}
 export default {
   name: 'ElTableFooter',
 
@@ -41,7 +49,6 @@ export default {
         }
       });
     }
-
     return (
       <table
         class="el-table__footer"
@@ -57,24 +64,38 @@ export default {
           }
         </colgroup>
         <tbody class={ [{ 'has-gutter': this.hasGutter }] }>
-          <tr>
-            {
-              this.columns.map((column, cellIndex) => <td
-                key={cellIndex}
-                colspan={ column.colSpan }
-                rowspan={ column.rowSpan }
-                class={ this.getRowClasses(column, cellIndex) }>
-                <div class={ ['cell', column.labelClassName] }>
-                  {
-                    sums[cellIndex]
-                  }
-                </div>
-              </td>)
-            }
-            {
-              this.hasGutter ? <th class="gutter"></th> : ''
-            }
-          </tr>
+          {
+              sums.map((itemSum, index) =>
+                  <tr class={ index === sums.length - 1 ? '' : 'lineFooter' }>
+                      {
+                          this.columns.map((column, cellIndex) => <td
+                              key={cellIndex}
+                              colSpan={column.colSpan}
+                              rowSpan={column.rowSpan}
+                              class={this.getRowClasses(column, cellIndex)}>
+                              {
+                                  checkHtml(itemSum[cellIndex])
+                                      ? h(
+                                      'div',
+                                      {
+                                          class: ['cell', column.labelClassName],
+                                          // DOM 属性
+                                          domProps: {
+                                              innerHTML: itemSum[cellIndex]
+                                          },
+                                      },
+                                      []
+                                      )
+                                      : <div class={['cell', column.labelClassName]}>{itemSum[cellIndex]}</div>
+                              }
+                          </td>)
+                      }
+                      {
+                          this.hasGutter ? <th class="gutter"></th> : ''
+                      }
+                  </tr>
+              )
+          }
         </tbody>
       </table>
     );

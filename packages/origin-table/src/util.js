@@ -1,4 +1,4 @@
-import { getValueByPath } from 'element-ui/src/utils/util';
+import { getValueByPath } from '../../../src/utils/util';
 
 export const getCell = function(event) {
   let cell = event.target;
@@ -201,12 +201,13 @@ export function toggleRowStatus(statusArr, row, newVal) {
   const included = index !== -1;
 
   const addRow = () => {
-    statusArr.push(row);
-    changed = true;
+      statusArr.push(row);
+      changed = true;
   };
+
   const removeRow = () => {
-    statusArr.splice(index, 1);
-    changed = true;
+      statusArr.splice(index, 1);
+      changed = true;
   };
 
   if (typeof newVal === 'boolean') {

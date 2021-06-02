@@ -1,6 +1,6 @@
-import './revise-el-table-mixins'
-import ElTable from './src/elTable';
+import ElTable from './src/table';
 
+/* istanbul ignore next */
 ElTable.install = function(Vue) {
   Vue.component(ElTable.name, ElTable);
 };

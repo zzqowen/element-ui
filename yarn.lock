@@ -7287,20 +7287,6 @@ pkg-up@^2.0.0:
   dependencies:
     find-up "^2.1.0"
 
-pl-table@^2.7.5:
-  version "2.7.5"
-  resolved "https://registry.yarnpkg.com/pl-table/-/pl-table-2.7.5.tgz#fd01d3e564fe5450ab23f0c96c0718fe670b0543"
-  integrity sha512-uzFetO3nEF8C40cADJpAJPu297X/6kuOqrP8XIPsWRay4mBgNt3FSokg6s/3wpnrLdXwkz6i9FscjkEaM0A7Pw==
-  dependencies:
-    async-validator "~1.8.1"
-    deepmerge "^1.2.0"
-    normalize-wheel "^1.0.1"
-    plxy-grid "^2.8.3"
-    resize-observer-polyfill "^1.5.0"
-    throttle-debounce "^1.0.1"
-    vuedraggable "^2.23.2"
-    xe-utils "^2.3.0"
-
 plugin-error@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npmjs.org/plugin-error/-/plugin-error-1.0.1.tgz"
@@ -7315,11 +7301,6 @@ pluralize@^7.0.0:
   version "7.0.0"
   resolved "https://registry.npmjs.org/pluralize/-/pluralize-7.0.0.tgz"
   integrity sha512-ARhBOdzS3e41FbkW/XWrTEtukqqLoK5+Z/4UeDaLuSW+39JPeFgs4gCGqsrJHVZX0fUrx//4OF0K1CUGwlIFow==
-
-plxy-grid@^2.8.3:
-  version "2.8.3"
-  resolved "https://registry.yarnpkg.com/plxy-grid/-/plxy-grid-2.8.3.tgz#a3c0c9ce920fcfa95aa55ba027c81422963174be"
-  integrity sha512-udl+J0sCjTyLJScMVnAfSTvyqyd9VbNlZ76ywMTqaKZKLnGykuOaUr77YLKH6OMgfBoX30MftjRticvjNca98g==
 
 portfinder@^1.0.26:
   version "1.0.26"
@@ -8673,10 +8654,10 @@ sockjs@0.3.20:
     uuid "^3.4.0"
     websocket-driver "0.6.5"
 
-sortablejs@1.10.2:
-  version "1.10.2"
-  resolved "https://registry.yarnpkg.com/sortablejs/-/sortablejs-1.10.2.tgz#6e40364d913f98b85a14f6678f92b5c1221f5290"
-  integrity sha512-YkPGufevysvfwn5rfdlGyrGjt7/CRHwvRPogD/lC+TnvcN29jDpCifKP+rBqf+LRldfXSTh+0CGLcSg0VIxq3A==
+sortablejs@^1.10.1:
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/sortablejs/-/sortablejs-1.13.0.tgz#3ab2473f8c69ca63569e80b1cd1b5669b51269e9"
+  integrity sha512-RBJirPY0spWCrU5yCmWM1eFs/XgX2J5c6b275/YyxFRgnzPhKl/TDeU2hNR8Dt7ITq66NRPM4UlOt+e5O4CFHg==
 
 source-list-map@^2.0.0:
   version "2.0.1"
@@ -9877,12 +9858,12 @@ vue@2.5.21:
   resolved "https://registry.npmjs.org/vue/-/vue-2.5.21.tgz"
   integrity sha512-Aejvyyfhn0zjVeLvXd70h4hrE4zZDx1wfZqia6ekkobLmUZ+vNFQer53B4fu0EjWBSiqApxPejzkO1Znt3joxQ==
 
-vuedraggable@^2.23.2:
-  version "2.24.3"
-  resolved "https://registry.yarnpkg.com/vuedraggable/-/vuedraggable-2.24.3.tgz#43c93849b746a24ce503e123d5b259c701ba0d19"
-  integrity sha512-6/HDXi92GzB+Hcs9fC6PAAozK1RLt1ewPTLjK0anTYguXLAeySDmcnqE8IC0xa7shvSzRjQXq3/+dsZ7ETGF3g==
+vuedraggable@2.23.2:
+  version "2.23.2"
+  resolved "https://registry.yarnpkg.com/vuedraggable/-/vuedraggable-2.23.2.tgz#0d95d7fdf4f02f56755a26b3c9dca5c7ca9cfa72"
+  integrity sha512-PgHCjUpxEAEZJq36ys49HfQmXglattf/7ofOzUrW2/rRdG7tu6fK84ir14t1jYv4kdXewTEa2ieKEAhhEMdwkQ==
   dependencies:
-    sortablejs "1.10.2"
+    sortablejs "^1.10.1"
 
 watchpack@^1.6.1:
   version "1.6.1"
@@ -10151,10 +10132,10 @@ ws@~3.3.1:
     safe-buffer "~5.1.0"
     ultron "~1.1.0"
 
-xe-utils@^2.3.0:
-  version "2.8.3"
-  resolved "https://registry.yarnpkg.com/xe-utils/-/xe-utils-2.8.3.tgz#b5cc9e871d1115a7ac3f2a9292c1dea5efe0f2d0"
-  integrity sha512-qjiq6juv+ZPDJC3oXr9E4wjaN73G/yeqUfozpmZOmBBTw2oH5A60Jz3AvCVLKFoTQl7qfsjefR9i2gyyMz7TQw==
+xe-utils@2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/xe-utils/-/xe-utils-2.3.0.tgz#5db56893c39b6e65c267997a607acbac887c9e96"
+  integrity sha512-AGb3oZxoktHHk1i1TD/v6aQyUbJUqMNuBp1zMFuNBCT8HjP7OD+C1X/8m14jzxOC1YeXfoHwwYmGDUMgqZnsFg==
 
 xmlhttprequest-ssl@~1.5.4:
   version "1.5.5"

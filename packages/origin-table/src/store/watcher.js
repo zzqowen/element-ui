@@ -1,5 +1,6 @@
 import Vue from 'vue';
-import merge from 'element-ui/src/utils/merge';
+import debounce from 'throttle-debounce/debounce';
+import merge from '../../../../src/utils/merge';
 import { getKeysMap, getRowIdentity, getColumnById, getColumnByKey, orderBy, toggleRowStatus } from '../util';
 import expand from './expand';
 import current from './current';
@@ -67,7 +68,11 @@ export default Vue.extend({
         sortProp: null,
         sortOrder: null,
 
-        hoverRow: null
+        hoverRow: null,
+
+        // 修改源码
+        useVirtual: false, // 加入是否为渲染大数据模式
+        bigDataCheckbox: false, // 大数据下是否更改全选框，单选框卡顿问题
       }
     };
   },
@@ -118,18 +123,18 @@ export default Vue.extend({
 
     // 选择
     isSelected(row) {
-      const { selection = [] } = this.states;
-      return selection.indexOf(row) > -1;
+        const { selection = [] } = this.states;
+        return selection.indexOf(row) > -1;
     },
 
     clearSelection() {
-      const states = this.states;
-      states.isAllSelected = false;
-      const oldSelection = states.selection;
-      if (oldSelection.length) {
-        states.selection = [];
-        this.table.$emit('selection-change', []);
-      }
+        const states = this.states;
+        states.isAllSelected = false;
+        const oldSelection = states.selection;
+        if (oldSelection.length) {
+            states.selection = [];
+            this.table.$emit('selection-change', []);
+        }
     },
 
     cleanSelection() {
@@ -158,16 +163,16 @@ export default Vue.extend({
     toggleRowSelection(row, selected, emitChange = true) {
       const changed = toggleRowStatus(this.states.selection, row, selected);
       if (changed) {
-        const newSelection = (this.states.selection || []).slice();
-        // 调用 API 修改选中值，不触发 select 事件
-        if (emitChange) {
-          this.table.$emit('select', newSelection, row);
-        }
-        this.table.$emit('selection-change', newSelection);
+          const newSelection = (this.states.selection || []).slice();
+          // 调用 API 修改选中值，不触发 select 事件
+          if (emitChange) {
+              this.table.$emit('select', newSelection, row);
+          }
+          this.table.$emit('selection-change', newSelection);
       }
     },
 
-    _toggleAllSelection() {
+    toggleAllSelection: debounce(10, function() {
       const states = this.states;
       const { data = [], selection } = states;
       // when only some rows are selected (but not all), select or deselect all of them
@@ -178,23 +183,43 @@ export default Vue.extend({
       states.isAllSelected = value;
 
       let selectionChanged = false;
-      data.forEach((row, index) => {
-        if (states.selectable) {
-          if (states.selectable.call(null, row, index) && toggleRowStatus(selection, row, value)) {
-            selectionChanged = true;
-          }
-        } else {
-          if (toggleRowStatus(selection, row, value)) {
-            selectionChanged = true;
-          }
-        }
-      });
-
-      if (selectionChanged) {
-        this.table.$emit('selection-change', selection ? selection.slice() : []);
-      }
-      this.table.$emit('select-all', selection);
-    },
+       // 修改源码 大数据情况下进行全选操作
+       if (this.states.useVirtual && this.states.bigDataCheckbox) {
+         // 全选
+         if (value) {
+             // 返回值用来决定这一行的 CheckBox 是否可以勾选
+             if (states.selectable) {
+                 // 找出不是禁用的行，然后全选上直接复制给selection，避开循环赋值
+                 states.selection = data.filter((item, index) => states.selectable.call(null, item, index))
+             } else {
+                 states.selection = data.filter(item=> item)
+             }
+         } else {
+           // 取消全选
+            states.selection = []
+         }
+         this.table.$emit('selection-change',  states.selection ?  states.selection.slice() : []);
+         this.table.$emit('select-all',  states.selection);
+       } else {
+           // ele源码  大数据全选卡的关键地方
+           data.forEach((row, index) => {
+               if (states.selectable) {
+                   // 如果当前列禁用就不需要去加入到选中项 states.selectable.call(null, row, index)
+                   if (states.selectable.call(null, row, index) && toggleRowStatus(selection, row, value)) {
+                       selectionChanged = true;
+                   }
+               } else {
+                   if (toggleRowStatus(selection, row, value)) {
+                       selectionChanged = true;
+                   }
+               }
+           });
+           if (selectionChanged) {
+               this.table.$emit('selection-change', selection ? selection.slice() : []);
+           }
+           this.table.$emit('select-all', selection);
+       }
+    }),
 
     updateSelectionByRowKey() {
       const states = this.states;
@@ -212,11 +237,11 @@ export default Vue.extend({
     updateAllSelected() {
       const states = this.states;
       const { selection, rowKey, selectable } = states;
-      // data 为 null 时，解构时的默认值会被忽略
+      // data 为 null 时，结构时的默认值会被忽略
       const data = states.data || [];
       if (data.length === 0) {
-        states.isAllSelected = false;
-        return;
+          states.isAllSelected = false;
+          return;
       }
 
       let selectedMap;

@@ -1,16 +1,15 @@
 import Vue from 'vue';
 import Watcher from './watcher';
-import { arrayFind } from 'element-ui/src/utils/util';
+import { arrayFind } from '../../../../src/utils/util';
 
 Watcher.prototype.mutations = {
   setData(states, data) {
     const dataInstanceChanged = states._data !== data;
     states._data = data;
-
     this.execQuery();
     // 数据变化，更新部分数据。
     // 没有使用 computed，而是手动更新部分数据 https://github.com/vuejs/vue/issues/6660#issuecomment-331417140
-    this.updateCurrentRowData();
+    this.updateCurrentRow();
     this.updateExpandRows();
     if (states.reserveSelection) {
       this.assertRowKey();
@@ -44,7 +43,6 @@ Watcher.prototype.mutations = {
       states.selectable = column.selectable;
       states.reserveSelection = column.reserveSelection;
     }
-
     if (this.table.$ready) {
       this.updateColumns(); // hack for dynamics insert column
       this.scheduleLayout();
@@ -68,13 +66,13 @@ Watcher.prototype.mutations = {
   },
 
   sort(states, options) {
-    const { prop, order, init } = options;
+    const { prop, order } = options;
     if (prop) {
       const column = arrayFind(states.columns, column => column.property === prop);
       if (column) {
         column.order = order;
         this.updateSort(column, prop, order);
-        this.commit('changeSortCondition', { init });
+        this.commit('changeSortCondition');
       }
     }
   },
@@ -89,7 +87,7 @@ Watcher.prototype.mutations = {
     const ingore = { filter: true };
     this.execQuery(ingore);
 
-    if (!options || !(options.silent || options.init)) {
+    if (!options || !options.silent) {
       this.table.$emit('sort-change', {
         column,
         prop,
@@ -118,8 +116,8 @@ Watcher.prototype.mutations = {
   },
 
   rowSelectedChanged(states, row) {
-    this.toggleRowSelection(row);
-    this.updateAllSelected();
+      this.toggleRowSelection(row);
+      this.updateAllSelected();
   },
 
   setHoverRow(states, row) {

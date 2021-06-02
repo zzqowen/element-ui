@@ -1,8 +1,8 @@
-import { arrayFindIndex } from 'element-ui/src/utils/util';
+import { arrayFindIndex } from '../../../src/utils/util';
 import { getCell, getColumnByCell, getRowIdentity } from './util';
-import { getStyle, hasClass, removeClass, addClass } from 'element-ui/src/utils/dom';
-import ElCheckbox from 'element-ui/packages/checkbox';
-import ElTooltip from 'element-ui/packages/tooltip';
+import { getStyle, hasClass, removeClass, addClass } from '../../../src/utils/dom';
+import ElCheckbox from '../../checkbox';
+import ElTooltip from '../../tooltip';
 import debounce from 'throttle-debounce/debounce';
 import LayoutObserver from './layout-observer';
 import { mapStates } from './store/helper';
@@ -162,7 +162,13 @@ export default {
     },
 
     getRowClass(row, rowIndex) {
-      const classes = ['el-table__row'];
+     const classes = ['el-table__row'];
+       // 修改源码，如果当前行被选中了 type类型为selection，就给当前行给个类样式，此样式类外面传递
+      const { selection = [] } = this.store.states;
+      if (selection.indexOf(row) > -1 && this.table.selectTrClass) {
+          classes.push(this.table.selectTrClass)
+      }
+
       if (this.table.highlightCurrentRow && row === this.store.states.currentRow) {
         classes.push('current-row');
       }
@@ -205,6 +211,11 @@ export default {
 
       if (this.isColumnHidden(columnIndex)) {
         classes.push('is-hidden');
+      }
+
+      // 修改源码 引入掉落元素时, 隐藏右边的边框线
+      if (column.dropAction) {
+        classes.push('pl-table-body-border-right-none-td');
       }
 
       const cellClassName = this.table.cellClassName;
@@ -308,6 +319,14 @@ export default {
         if (column) {
           table.$emit(`cell-${name}`, row, column, cell, event);
         }
+        // 修改源码，点击单元格，去调用下树形节点展开方法,trigger是外面传递解决
+        if (table.treeOpts.trigger === 'cell' && column.treeNode) {
+            table.triggerTreeExpandEvent(row, 'cell', event)
+        }
+      }
+      // 修改源码，点击单元格，去调用下树形节点展开方法,trigger是外面传递解决
+      if (table.treeOpts.trigger === 'row') {
+          table.triggerTreeExpandEvent(row, 'row', event)
       }
       table.$emit(`row-${name}`, row, column, event);
     },
@@ -321,13 +340,9 @@ export default {
         rowClasses.push('el-table__row--level-' + treeRowData.level);
         display = treeRowData.display;
       }
-      // 指令 v-show 会覆盖 row-style 中 display
-      // 使用 :style 代替 v-show https://github.com/ElemeFE/element/issues/16995
-      let displayStyle = display ? null : {
-        display: 'none'
-      };
       return (<tr
-        style={ [displayStyle, this.getRowStyle(row, $index)] }
+        v-show={display}
+        style={ this.getRowStyle(row, $index) }
         class={ rowClasses }
         key={ this.getKeyOfRow(row, $index) }
         on-dblclick={ ($event) => this.handleDoubleClick($event, row) }

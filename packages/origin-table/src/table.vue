@@ -1,6 +1,7 @@
 <template>
   <div class="el-table"
     :class="[{
+      'fixed-columns-roll-style': fixedColumnsRoll && showSummary, // 修改源码, 导致固定列部分的横向滚动条不可拖动
       'el-table--fit': fit,
       'el-table--striped': stripe,
       'el-table--border': border || isGroup,
@@ -46,11 +47,13 @@
         }">
       </table-body>
       <div
-        v-if="!data || data.length === 0"
+        v-if="!store.states.data || store.states.data.length === 0"
         class="el-table__empty-block"
         ref="emptyBlock"
-        :style="emptyBlockStyle">
-        <span class="el-table__empty-text" >
+        :style="{
+          width: bodyWidth
+        }">
+        <span class="el-table__empty-text">
           <slot name="empty">{{ emptyText || t('el.table.emptyText') }}</slot>
         </span>
       </div>
@@ -63,7 +66,7 @@
     </div>
     <div
       v-if="showSummary"
-      v-show="data && data.length > 0"
+      v-show="store.states.data && store.states.data.length > 0"
       v-mousewheel="handleHeaderFooterMousewheel"
       class="el-table__footer-wrapper"
       ref="footerWrapper">
@@ -125,7 +128,7 @@
       </div>
       <div
         v-if="showSummary"
-        v-show="data && data.length > 0"
+        v-show="store.states.data && store.states.data.length > 0"
         class="el-table__fixed-footer-wrapper"
         ref="fixedFooterWrapper">
         <table-footer
@@ -186,7 +189,7 @@
       </div>
       <div
         v-if="showSummary"
-        v-show="data && data.length > 0"
+        v-show="store.states.data && store.states.data.length > 0"
         class="el-table__fixed-footer-wrapper"
         ref="rightFixedFooterWrapper">
         <table-footer
@@ -209,16 +212,37 @@
         height: layout.headerHeight + 'px'
       }"></div>
     <div class="el-table__column-resize-proxy" ref="resizeProxy" v-show="resizeProxyVisible"></div>
+    <!--修改源码，解决合计时，固定列不可拖动，加上这个主要是解决修改层级导致阴影消失，为了给固定列加个阴影效果-->
+    <div v-if="fixedColumns.length > 0 && fixedColumnsRoll && showSummary"
+         class="el-table__fixed pltableFixedWrapper"
+         ref="leftFixed"
+         :style="[{
+         width: layout.fixedWidth ? layout.fixedWidth + 'px' : '',
+         top: layout.headerHeight + 'px'
+        },
+        fixedColumnsRollHeight]">
+    </div>
+    <!--修改源码，解决合计时，固定列不可拖动，加上这个主要是解决修改层级导致阴影消失，为了给固定列加个阴影效果-->
+    <div v-if="rightFixedColumns.length > 0 && fixedColumnsRoll && showSummary"
+         class="el-table__fixed-right pltableFixedWrapper"
+         ref="rightFixed"
+         :style="[{
+         width: layout.rightFixedWidth ? layout.rightFixedWidth + 'px' : '',
+         top: layout.headerHeight + 'px',
+         right: layout.scrollY ? (border ? layout.gutterWidth : (layout.gutterWidth || 0)) + 'px' : ''
+        },
+        fixedColumnsRollHeight]">
+    </div>
   </div>
 </template>
 
-<script type="text/babel">
-  import ElCheckbox from 'element-ui/packages/checkbox';
+<script>
+  import ElCheckbox from '../../checkbox';
   import { debounce, throttle } from 'throttle-debounce';
-  import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event';
-  import Mousewheel from 'element-ui/src/directives/mousewheel';
-  import Locale from 'element-ui/src/mixins/locale';
-  import Migrating from 'element-ui/src/mixins/migrating';
+  import { addResizeListener, removeResizeListener } from '../../../src/utils/resize-event';
+  import Mousewheel from '../../../src/directives/mousewheel';
+  import Locale from '../../../src/mixins/locale';
+  import Migrating from '../../../src/mixins/migrating';
   import { createStore, mapStates } from './store/helper';
   import TableLayout from './table-layout';
   import TableBody from './table-body';
@@ -229,7 +253,7 @@
   let tableIdSeed = 1;
 
   export default {
-    name: 'ElTable',
+    name: 'OrTable',
 
     mixins: [Locale, Migrating],
 
@@ -274,6 +298,8 @@
       showSummary: Boolean,
 
       sumText: String,
+
+      fixedColumnsRoll: Boolean,
 
       summaryMethod: Function,
 
@@ -354,8 +380,13 @@
         this.store.commit('setCurrentRow', row);
       },
 
-      toggleRowSelection(row, selected) {
-        this.store.toggleRowSelection(row, selected, false);
+      toggleRowSelection(row, selected, recordTableSelect) {
+        // 需要记录id
+        if (recordTableSelect) {
+            this.store.toggleRowSelection(row, selected, true);
+        } else {
+            this.store.toggleRowSelection(row, selected, false);
+        }
         this.store.updateAllSelected();
       },
 
@@ -383,7 +414,6 @@
       updateScrollY() {
         const changed = this.layout.updateScrollY();
         if (changed) {
-          this.layout.notifyObservers('scrollable');
           this.layout.updateColumnsWidth();
         }
       },
@@ -521,6 +551,25 @@
         return {};
       },
 
+      // 修改源码解决滚动条问题
+      fixedColumnsRollHeight () {
+          if (this.height) {
+              return {
+                  height: this.layout.fixedBodyHeight ? this.layout.fixedBodyHeight + 'px' : ''
+              };
+          } else if (this.maxHeight){
+              setTimeout(() => {
+                  let data = ['rightFixed', 'leftFixed']
+                  data.forEach(item => {
+                      if (this.$refs[item]) {
+                          const bodyWrapper = this.bodyWrapper;
+                          this.$refs[item].style.height = bodyWrapper ? bodyWrapper.clientHeight + 'px' : ''
+                      }
+                  })
+              })
+          }
+      },
+
       fixedBodyHeight() {
         if (this.height) {
           return {
@@ -564,18 +613,6 @@
         }
       },
 
-      emptyBlockStyle() {
-        if (this.data && this.data.length) return null;
-        let height = '100%';
-        if (this.layout.appendHeight) {
-          height = `calc(100% - ${this.layout.appendHeight}px)`;
-        }
-        return {
-          width: this.bodyWidth,
-          height
-        };
-      },
-
       ...mapStates({
         selection: 'selection',
         columns: 'columns',
@@ -589,14 +626,18 @@
       height: {
         immediate: true,
         handler(value) {
-          this.layout.setHeight(value);
+            if (!this.useVirtual) {
+                this.layout.setHeight(value);
+            }
         }
       },
 
       maxHeight: {
         immediate: true,
         handler(value) {
-          this.layout.setMaxHeight(value);
+            if (!this.useVirtual) {
+                this.layout.setMaxHeight(value);
+            }
         }
       },
 
@@ -610,8 +651,10 @@
 
       data: {
         immediate: true,
-        handler(value) {
-          this.store.commit('setData', value);
+         handler(value) {
+           if (!this.useVirtual) {
+               this.store.commit('setData', value);
+           }
         }
       },
 

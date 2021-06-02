@@ -2,7 +2,7 @@
 
 用于展示多条结构类似的数据，可对数据进行排序、筛选、对比或其他自定义操作。
 
-### 基础表格
+### 基础表格(多数据卡顿处理)
 
 基础的表格展示用法。
 
@@ -14,6 +14,10 @@
       :height="300"
       :data="tableData"
       style="width: 100%">
+      <el-table-column
+        type="selection"
+        width="55">
+      </el-table-column>
       <el-table-column
         prop="date"
         label="日期"
