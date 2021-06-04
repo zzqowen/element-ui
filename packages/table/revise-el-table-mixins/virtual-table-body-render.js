@@ -23,7 +23,6 @@ export default function render (h) {
       return prev;
     }, []);
   }
-  console.log(this.table);
   return (
     <div
       style={[{height: `${this.table.virtualBodyHeight}px`}]}
