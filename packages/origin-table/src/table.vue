@@ -42,6 +42,7 @@
         :row-class-name="rowClassName"
         :row-style="rowStyle"
         :highlight="highlightCurrentRow"
+        :bodyWidth="bodyWidth"
         :style="{
            width: bodyWidth
         }">

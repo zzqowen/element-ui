@@ -23,6 +23,7 @@ export default function render (h) {
       return prev;
     }, []);
   }
+  console.log(this.table);
   return (
     <div
       style={[{height: `${this.table.virtualBodyHeight}px`}]}
@@ -33,7 +34,10 @@ export default function render (h) {
           class="el-table__body"
           cellspacing="0"
           cellpadding="0"
-          border="0">
+          border="0"
+          style={
+            [{width: this.table.bodyWidth}]
+          }>
           <colgroup>
             {
               this._l(this.columns, (column, cellIndex) => columnsHidden[cellIndex] && this.fixed ? '' : <col name={ column.id } />)

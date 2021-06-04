@@ -29,6 +29,7 @@
         width="180">
       </el-table-column>
       <el-table-column
+        width="800"
         prop="address"
         label="地址">
       </el-table-column>
