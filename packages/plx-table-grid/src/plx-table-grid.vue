@@ -441,7 +441,6 @@
             },
             // 单元格被鼠标右键点击时触发该事件
             rowContextmenu ({type,row,rowIndex,column,columnIndex,cell},event) {
-                console.log(213121)
                 this.$emit('row-contextmenu', row, column, event)
             },
             // 当某一列的表头被点击时会触发该事件

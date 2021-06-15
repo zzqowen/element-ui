@@ -1,9 +1,9 @@
 // reference https://github.com/noeldelgado/gemini-scrollbar/blob/master/index.js
 
-import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event';
-import scrollbarWidth from 'element-ui/src/utils/scrollbar-width';
-import { on, off } from 'element-ui/src/utils/dom';
-import { rafThrottle, isFirefox, toObject } from 'element-ui/src/utils/util';
+import { addResizeListener, removeResizeListener } from 'element-ui-zq/src/utils/resize-event';
+import scrollbarWidth from 'element-ui-zq/src/utils/scrollbar-width';
+import { on, off } from 'element-ui-zq/src/utils/dom';
+import { rafThrottle, isFirefox, toObject } from 'element-ui-zq/src/utils/util';
 import Bar from './bar';
 const mousewheelEventName = isFirefox() ? 'DOMMouseScroll' : 'mousewheel';
 

@@ -21,9 +21,9 @@ Le site précédent vous permet de visualiser et de télécharger un nouveau th�
 $--color-primary: teal;
 
 /* chemin vers le fichier de police, requis */
-$--font-path: '~element-ui/lib/theme-chalk/fonts';
+$--font-path: '~element-ui-zq/lib/theme-chalk/fonts';
 
-@import "~element-ui/packages/theme-chalk/src/index";
+@import "~element-ui-zq/packages/theme-chalk/src/index";
 ```
 
 Puis dans le fichier d'entrée, importez ce style au lieu de celui d'Element:

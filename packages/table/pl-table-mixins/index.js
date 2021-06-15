@@ -183,7 +183,6 @@ export default {
         },
         // 用于多选表格，切换某一行的选中状态
         newtoggleRowSelections (datas) {
-          console.log(datas)
             if (datas.length > 0 && this.$refs.singleTable) {
                 datas.forEach(item => {
                     if (item.selected) {

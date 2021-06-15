@@ -655,6 +655,9 @@
          handler(value) {
            if (!this.useVirtual) {
                this.store.commit('setData', value);
+               this.$nextTick(() => {
+                  this.layout.notifyObservers('scrollable');
+               });
            }
         }
       },
