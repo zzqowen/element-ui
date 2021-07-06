@@ -233,7 +233,7 @@ export default {
                     }
                     const values = data.map(item => Number(item[column.property]))
                     // 需要合并的选项
-                    const flas = this.totalOption.filter(item => item.label === column.label)
+                    const flas = (!!this.totalOption && this.totalOption.length > 0) ? this.totalOption.filter(item => item.label === column.label) : [{unit: ''}];
                     if (!values.every(value => isNaN(value)) && flas.length > 0) {
                         sums[index] = values.reduce((prev, curr) => {
                             const value = Number(curr)

@@ -13,10 +13,17 @@
       ref="ddd"
       :height="300"
       :data="tableData"
+      show-summary
+      use-virtual
       style="width: 100%;display: flex;flex: 1;">
       <el-table-column
         type="selection"
         width="55">
+      </el-table-column>
+      <el-table-column
+        prop="value"
+        label="值"
+        width="180">
       </el-table-column>
       <el-table-column
         prop="date"
@@ -53,9 +60,10 @@
           this.tableData = new Array(100).fill({
             date: '2016-05-02',
             name: '王小虎',
+            value: 10,
             address: '上海市普陀区金沙江路 1518 弄'
           });
-        }, 2000);
+        }, 100);
       }
     }
   </script>
